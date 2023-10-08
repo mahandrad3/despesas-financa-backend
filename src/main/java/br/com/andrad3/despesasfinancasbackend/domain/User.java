@@ -1,6 +1,8 @@
 package br.com.andrad3.despesasfinancasbackend.domain;
 
+import br.com.andrad3.despesasfinancasbackend.dtos.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -23,16 +25,18 @@ public class User implements Serializable {
     private String email;
     @Column(name = "dataCriacao")
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate creationDate;
+    private LocalDate creationDate = LocalDate.now();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> categories;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Account> contas;
 
     public User() {
     }
 
-    public User(Long id, String name, String password, String email, LocalDate creationDate, List<Category> categories, List<Account> contas) {
+    public User(Long id, String name, String password, String email,List<Category> categories, List<Account> contas) {
         this.id = id;
         this.name = name;
         this.password = password;
@@ -40,6 +44,13 @@ public class User implements Serializable {
         this.creationDate = creationDate;
         this.categories = categories;
         this.contas = contas;
+    }
+
+    public User(UserDTO dto) {
+        this.id = dto.getId();
+        this.name = dto.getName();
+        this.password = dto.getPassword();
+        this.email = dto.getEmail();
     }
 
     public Long getId() {

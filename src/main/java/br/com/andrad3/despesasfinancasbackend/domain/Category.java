@@ -1,6 +1,7 @@
 package br.com.andrad3.despesasfinancasbackend.domain;
 
 import br.com.andrad3.despesasfinancasbackend.domain.enums.TypeTransaction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Category implements Serializable {
     private Integer idCon;
     @Enumerated(EnumType.STRING)
     private TypeTransaction tipo;
+    @JsonIgnore
     @ManyToOne
     private User user;
 

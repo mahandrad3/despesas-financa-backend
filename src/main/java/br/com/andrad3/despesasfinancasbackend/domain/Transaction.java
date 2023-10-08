@@ -1,6 +1,7 @@
 package br.com.andrad3.despesasfinancasbackend.domain;
 
 import br.com.andrad3.despesasfinancasbackend.domain.enums.TypeTransaction;
+import br.com.andrad3.despesasfinancasbackend.dtos.TransactionDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
@@ -17,9 +18,10 @@ public class Transaction implements Serializable {
     private Long id;
     private BigDecimal valor;
     private Long idCategory;
+    private String descricao;
     @Column(name = "dataCriacao")
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate creationDate = LocalDate.now();
+    private LocalDate creationDate;
     @Enumerated(EnumType.STRING)
     private TypeTransaction type;
     @ManyToOne
@@ -28,13 +30,24 @@ public class Transaction implements Serializable {
     public Transaction() {
     }
 
-    public Transaction(Long id, BigDecimal valor, Long idCategory, LocalDate creationDate, TypeTransaction type, Account account) {
+    public Transaction(Long id, BigDecimal valor, Long idCategory, String descricao, LocalDate creationDate, TypeTransaction type, Account account) {
         this.id = id;
         this.valor = valor;
         this.idCategory = idCategory;
+        this.descricao = descricao;
         this.creationDate = creationDate;
         this.type = type;
         this.account = account;
+    }
+
+    public Transaction(TransactionDTO transactionDTO) {
+        this.id = transactionDTO.getId();
+        this.valor = transactionDTO.getValor();
+        this.idCategory = transactionDTO.getIdCategory();
+        this.creationDate = transactionDTO.getLocalDate();
+        this.type = transactionDTO.getType();
+        this.account = transactionDTO.getAccount();
+        this.descricao = transactionDTO.getDescricao();
     }
 
     public Long getId() {

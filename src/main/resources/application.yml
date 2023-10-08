@@ -3,7 +3,7 @@ spring:
     url: jdbc:h2:mem:testdb  # URL de conexão para um banco de dados H2 em memória
     driver-class-name: org.h2.Driver  # Driver JDBC para o H2
     username: sa  # Nome de usuário do banco de dados H2
-    password: sa # Senha do banco de dados H2 (deixe em branco por padrão)
+    password: sasasasa # Senha do banco de dados H2 (deixe em branco por padrão)
   h2:
     console:
       enabled: true  # Ativar o console H2 (para acesso à interface web)

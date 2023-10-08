@@ -1,47 +1,29 @@
-package br.com.andrad3.despesasfinancasbackend.domain;
+package br.com.andrad3.despesasfinancasbackend.dtos;
 
-import br.com.andrad3.despesasfinancasbackend.dtos.AccountDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import br.com.andrad3.despesasfinancasbackend.domain.Transaction;
+import br.com.andrad3.despesasfinancasbackend.domain.User;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-public class Account implements Serializable {
+public class AccountDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private BigDecimal saldo;
-    @JsonIgnore
-    @ManyToOne
     private User user;
-    @JsonIgnore
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Transaction> transactions;
 
-    public Account() {
+    public AccountDTO() {
     }
 
-    public Account(Long id, String name, BigDecimal saldo, User user, List<Transaction> transactions) {
+    public AccountDTO(Long id, String name, BigDecimal saldo, User user, List<Transaction> transactions) {
         this.id = id;
         this.name = name;
         this.saldo = saldo;
         this.user = user;
         this.transactions = transactions;
-    }
-
-    public Account(AccountDTO objDTO) {
-        this.id = objDTO.getId();
-        this.name = objDTO.getName();
-        this.saldo = objDTO.getSaldo();
-        this.user = objDTO.getUser();
-        this.transactions = objDTO.getTransactions();
     }
 
     public Long getId() {
@@ -88,8 +70,8 @@ public class Account implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Account account = (Account) o;
-        return Objects.equals(id, account.id) && Objects.equals(saldo, account.saldo) && Objects.equals(user, account.user) && Objects.equals(transactions, account.transactions);
+        AccountDTO that = (AccountDTO) o;
+        return Objects.equals(id, that.id) && Objects.equals(saldo, that.saldo) && Objects.equals(user, that.user) && Objects.equals(transactions, that.transactions);
     }
 
     @Override
