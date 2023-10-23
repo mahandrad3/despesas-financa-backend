@@ -1,13 +1,16 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb  # URL de conexão para um banco de dados H2 em memória
-    driver-class-name: org.h2.Driver  # Driver JDBC para o H2
-    username: sa  # Nome de usuário do banco de dados H2
-    password: sasasasa # Senha do banco de dados H2 (deixe em branco por padrão)
-  h2:
-    console:
-      enabled: true  # Ativar o console H2 (para acesso à interface web)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/despesas_financas_tcc?useTimezone=true&serverTimezone=UTC # URL de conexão para um banco de dados H2 em memória
+    username: root
+    password: admin123
   jpa:
     hibernate:
-      ddl-auto: create  # Configuração para atualizar automaticamente o esquema do banco de dados
+      ddl-auto: create
+    properties:
+      dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
+jwt:
+  secret: VkRGU1JsTXdkRVpVYTFaSlZsVXhRMVF3YkZCVVJXeFBVMFZGUFE9PQ==
+  expiration: 15
+

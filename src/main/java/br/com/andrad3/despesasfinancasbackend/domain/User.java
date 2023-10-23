@@ -1,124 +1,94 @@
 package br.com.andrad3.despesasfinancasbackend.domain;
 
+import br.com.andrad3.despesasfinancasbackend.domain.enums.UserRole;
 import br.com.andrad3.despesasfinancasbackend.dtos.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
+
+@Data
+@NoArgsConstructor //cONSTRUTOR VAZIO SPRING FUNCIONAR
+@AllArgsConstructor
 @Entity
 @Table(name = "Usuarios")
-public class User implements Serializable {
+public class User  implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     @Column(name = "nome", length = 45)
     private String name;
+    @NotNull
     @Column(name = "password")
     private String password;
+    @NotNull
     @Column(name = "email", length = 255, unique = true)
     private String email;
     @Column(name = "dataCriacao")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate creationDate = LocalDate.now();
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> categories;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Account> contas;
+    private UserRole role;
 
-    public User() {
+    public User(UserDTO objdto) {
+        this.id = objdto.getId();
+        this.name = objdto.getName();
+        this.password = objdto.getPassword();
+        this.email = objdto.getEmail();
+        this.creationDate = objdto.getCreationDate();
     }
 
-    public User(Long id, String name, String password, String email,List<Category> categories, List<Account> contas) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
+    public User(String email, String encryptedPassword, String name, UserRole role) {
         this.email = email;
-        this.creationDate = creationDate;
-        this.categories = categories;
-        this.contas = contas;
-    }
-
-    public User(UserDTO dto) {
-        this.id = dto.getId();
-        this.name = dto.getName();
-        this.password = dto.getPassword();
-        this.email = dto.getEmail();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+        this.password = encryptedPassword;
         this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
-
-    public List<Account> getContas() {
-        return contas;
-    }
-
-    public void setContas(List<Account> contas) {
-        this.contas = contas;
+        this.role = role;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(creationDate, user.creationDate) && Objects.equals(categories, user.categories) && Objects.equals(contas, user.contas);
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, password, email, creationDate, categories, contas);
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -40,4 +40,14 @@ public class UserService {
         return objRecuperado.orElseThrow();
     }
 
+    public Optional<User> findByLogin(String email){
+        Optional<User> user = repository.findByEmail(email);
+        return user;
+    }
+
+    public void addUser(User newUser) {
+        User salvoNoBanco = repository.save(newUser);
+        dbService.setDefaultCategories(salvoNoBanco.getId());
+        dbService.setDefaultAccount(salvoNoBanco.getId());
+    }
 }

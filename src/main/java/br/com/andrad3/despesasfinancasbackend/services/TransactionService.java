@@ -18,12 +18,12 @@ public class TransactionService {
     @Autowired
     AccountRepository accountRepository;
 
-    public void addTransaction(TransactionDTO objDTO){
-        objDTO.setId(null);
-
-        Transaction transaction = new Transaction(objDTO);
-
-    }
+//    public void addTransaction(TransactionDTO objDTO){
+//        objDTO.setId(null);
+//
+//        Transaction transaction = new Transaction(objDTO);
+//
+//    }
 
 
 }
