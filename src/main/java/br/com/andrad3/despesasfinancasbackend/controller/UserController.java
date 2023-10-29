@@ -41,19 +41,22 @@ public class UserController {
         User objRecuperado = service.findById(id);
         return ResponseEntity.ok().body(objRecuperado);
     }
-
+    @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Realizar o login", method = "POST")
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid loginDTO data){
+    public ResponseEntity login(@RequestBody  loginDTO data){
+        if(this.service.findByLogin(data.getEmail()).isEmpty()){
+            //return ResponseEntity
+        }
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(),data.getPassword());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((User)auth.getPrincipal());
         return ResponseEntity.ok(token);
     }
-
+    @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Registra um novo usuario", method = "POST")
-    @PostMapping("/registrar")
+    @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
         if(this.service.findByLogin(data.getEmail()).isEmpty()){
             String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
