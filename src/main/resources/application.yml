@@ -1,4 +1,11 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: coincontroltcc@gmail.com
+    password: cxlg aouf mydt vnmn
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/despesas_financas_tcc?useTimezone=true&serverTimezone=UTC

@@ -1,5 +1,6 @@
 package br.com.andrad3.despesasfinancasbackend.controller;
 
+import br.com.andrad3.despesasfinancasbackend.Exceptions.InvalidEnumException;
 import br.com.andrad3.despesasfinancasbackend.domain.User;
 import br.com.andrad3.despesasfinancasbackend.dtos.CredenciaisDTO;
 import br.com.andrad3.despesasfinancasbackend.dtos.RegisterDTO;
@@ -9,11 +10,14 @@ import br.com.andrad3.despesasfinancasbackend.security.TokenService;
 import br.com.andrad3.despesasfinancasbackend.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,25 +49,39 @@ public class UserController {
     @Operation(summary = "Realizar o login", method = "POST")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody  loginDTO data){
-        if(this.service.findByLogin(data.getEmail()).isEmpty()){
-            //return ResponseEntity
-        }
+        this.service.isValidLogin(data);
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(),data.getPassword());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((User)auth.getPrincipal());
-        return ResponseEntity.ok(token);
+        try {
+            Authentication authentication = this.authenticationManager.authenticate(usernamePassword);
+            var token = tokenService.generateToken((User)authentication.getPrincipal());
+            return ResponseEntity.ok("Bearer "+token);
+        }catch (AuthenticationException e){
+            throw new InvalidEnumException("Erro para se autenticar no sistema ",e);
+        }
     }
+
     @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Registra um novo usuario", method = "POST")
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.service.findByLogin(data.getEmail()).isEmpty()){
+        this.service.isValidRegister(data);
+        try {
             String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
             User newUser = new User(data.getEmail(),encryptedPassword,data.getName(),data.getRole());
             this.service.addUser(newUser);
             return ResponseEntity.ok().build();
+        }catch (RuntimeException e){
+            throw new InvalidEnumException("Erro ao tentar cadastrar",e);
         }
-        return ResponseEntity.badRequest().build();
     }
+
+    @CrossOrigin(origins = "http://locahost:3000")
+    @Operation(summary = "Envia um email para trocar a senha", method = "POST")
+    @PostMapping("/changePassword")
+    public ResponseEntity changePassword(@RequestBody @Valid String email) throws MessagingException {
+        this.service.sendEmailForPassword(email);
+        return ResponseEntity.ok().build();
+    }
+
 }

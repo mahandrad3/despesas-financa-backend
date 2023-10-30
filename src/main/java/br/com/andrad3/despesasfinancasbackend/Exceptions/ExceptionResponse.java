@@ -18,10 +18,10 @@ public class ExceptionResponse {
         Map<String,Object> body = new HashMap<>();
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
-        body.put("Mensagem",ex.getMessage());
-        body.put("Status", status.value());
-        body.put("Mensagem",ex.getMessage());
-        body.put("Time", LocalDateTime.now());
+        body.put("mensagem",ex.getMessage());
+        body.put("status", status.value());
+        body.put("time", LocalDateTime.now());
+        if(ex.getCause() != null) body.put("erro",ex.getCause().getMessage());
 
         return new ResponseEntity<>(body,status);
     }
