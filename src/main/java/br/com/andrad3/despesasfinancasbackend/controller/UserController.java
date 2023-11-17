@@ -2,10 +2,7 @@ package br.com.andrad3.despesasfinancasbackend.controller;
 
 import br.com.andrad3.despesasfinancasbackend.Exceptions.InvalidEnumException;
 import br.com.andrad3.despesasfinancasbackend.domain.User;
-import br.com.andrad3.despesasfinancasbackend.dtos.CredenciaisDTO;
-import br.com.andrad3.despesasfinancasbackend.dtos.RegisterDTO;
-import br.com.andrad3.despesasfinancasbackend.dtos.UserDTO;
-import br.com.andrad3.despesasfinancasbackend.dtos.loginDTO;
+import br.com.andrad3.despesasfinancasbackend.dtos.*;
 import br.com.andrad3.despesasfinancasbackend.security.TokenService;
 import br.com.andrad3.despesasfinancasbackend.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,9 +76,24 @@ public class UserController {
     @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Envia um email para trocar a senha", method = "POST")
     @PostMapping("/changePassword")
-    public ResponseEntity changePassword(@RequestBody @Valid String email) throws MessagingException {
-        this.service.sendEmailForPassword(email);
+    public ResponseEntity changePassword(@RequestBody @Valid CredenciaisForResetEmailDTO credenciaisForResetEmailDTO) throws MessagingException {
+        this.service.sendEmailForPassword(credenciaisForResetEmailDTO.getEmail());
         return ResponseEntity.ok().build();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @Operation(summary = "Verifica se o token é valido", method = "POST")
+    @PostMapping("/validIsToken")
+    public ResponseEntity validToken(@RequestBody @Valid TokenValidDTO objDTO){
+        this.tokenService.validateToken(objDTO.getToken());
+        return  ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin(origins = "http://locahost:3000")
+    @Operation(summary = "Confirma o email de usuario, e altera a senha", method = "POST")
+    @PutMapping("/changePassword")
+    public ResponseEntity changePassword(@RequestBody @Valid TokenValidDTO objDTO) {
+        this.service.changePassword(objDTO);
+        return ResponseEntity.ok().build();
+    }
 }

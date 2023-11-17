@@ -20,4 +20,6 @@ spring:
 jwt:
   secret: VkRGU1JsTXdkRVpVYTFaSlZsVXhRMVF3YkZCVVJXeFBVMFZGUFE9PQ==
   expiration: 2
+  expiration-email: 15
+
 

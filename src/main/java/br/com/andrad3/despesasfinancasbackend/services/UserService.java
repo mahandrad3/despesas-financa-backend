@@ -2,14 +2,13 @@ package br.com.andrad3.despesasfinancasbackend.services;
 
 import br.com.andrad3.despesasfinancasbackend.Exceptions.InvalidEnumException;
 import br.com.andrad3.despesasfinancasbackend.domain.User;
-import br.com.andrad3.despesasfinancasbackend.dtos.CredenciaisDTO;
-import br.com.andrad3.despesasfinancasbackend.dtos.RegisterDTO;
-import br.com.andrad3.despesasfinancasbackend.dtos.UserDTO;
-import br.com.andrad3.despesasfinancasbackend.dtos.loginDTO;
+import br.com.andrad3.despesasfinancasbackend.dtos.*;
 import br.com.andrad3.despesasfinancasbackend.repositories.UserRepository;
+import br.com.andrad3.despesasfinancasbackend.security.TokenService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,6 +24,9 @@ public class UserService {
 
     @Autowired
     EmailSenderService emailSenderService;
+
+    @Autowired
+    TokenService tokenService;
 
     public User addUser(UserDTO objDTO){
         objDTO.setId(null);
@@ -70,8 +72,18 @@ public class UserService {
     }
 
     public void sendEmailForPassword(String email) throws MessagingException {
-        if(findByLogin(email).isEmpty()) throw new InvalidEnumException("Email nao cadastrado no sistema");
-        emailSenderService.sendEmail(email);
+        Optional<User> byLogin = findByLogin(email);
+        if(byLogin.isEmpty()) throw new InvalidEnumException("Email nao cadastrado no sistema");
+        emailSenderService.sendEmail(email,byLogin.get());
+    }
 
+    public void changePassword(TokenValidDTO objDTO) {
+        String emailRecuperado = this.tokenService.validateToken(objDTO.getToken());
+        Optional<User> userRecuperado = this.findByLogin(emailRecuperado);
+        if(userRecuperado.isPresent()){
+            String encryptedPassword = new BCryptPasswordEncoder().encode(objDTO.getSenha());
+            userRecuperado.get().setPassword(encryptedPassword);
+            this.repository.save(userRecuperado.get());
+        }
     }
 }

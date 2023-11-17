@@ -1,5 +1,6 @@
 package br.com.andrad3.despesasfinancasbackend.security;
 
+import br.com.andrad3.despesasfinancasbackend.Exceptions.InvalidEnumException;
 import br.com.andrad3.despesasfinancasbackend.domain.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -19,6 +20,8 @@ public class TokenService {
     private String secret;
     @Value("${jwt.expiration}")
     private Integer hour;
+    @Value("${jwt.expiration-email}")
+    private Integer minute;
     public String generateToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -32,20 +35,40 @@ public class TokenService {
         }
     }
 
+    public String generateTokenEmail(User user){
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            String token = JWT.create().withIssuer("auth-api")
+                    .withSubject(user.getUsername())
+                    .withExpiresAt(genExpirationDateEmail())
+                    .sign(algorithm);
+            return token;
+        }catch (JWTCreationException e){
+            throw new RuntimeException("Error ao criar o token", e);
+        }
+    }
+
     public String validateToken(String token){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
+            String tst = JWT.require(algorithm)
                     .withIssuer("auth-api")
                     .build()
                     .verify(token)
                     .getSubject();
+            return tst;
         }catch(JWTVerificationException e){
-            return "";
+            throw new InvalidEnumException("Token invalido");
+
         }
     }
 
+
     private Instant genExpirationDate(){
         return LocalDateTime.now().plusHours(hour).toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    private Instant genExpirationDateEmail(){
+        return LocalDateTime.now().plusMinutes(minute).toInstant(ZoneOffset.of("-03:00"));
     }
 }
