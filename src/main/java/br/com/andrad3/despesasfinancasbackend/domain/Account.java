@@ -36,4 +36,8 @@ public class Account implements Serializable {
         this.user = objDTO.getUser();
         this.transactions = objDTO.getTransactions();
     }
+
+
+
+
 }

@@ -40,6 +40,7 @@ public class DBService {
             categories.add(new Category(null,"Saude",2, TypeTransaction.DESPESA,user));
             categories.add(new Category(null,"Mercado",2, TypeTransaction.DESPESA,user));
             categories.add(new Category(null,"Lazer e hobbies",2, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Outros",2, TypeTransaction.DESPESA,user));
             //DESPESAS
             categories.add(new Category(null,"Empréstimos",2, TypeTransaction.RECEITA,user));
             categories.add(new Category(null,"Investimentos",2, TypeTransaction.RECEITA,user));
