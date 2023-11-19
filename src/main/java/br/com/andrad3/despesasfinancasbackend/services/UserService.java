@@ -55,6 +55,11 @@ public class UserService {
         return user;
     }
 
+    public Optional<User> getUserForToken(String token){
+        String emailRecuperado = this.tokenService.validateToken(token);
+        return this.findByLogin(emailRecuperado);
+    }
+
     public void addUser(User newUser) {
         User salvoNoBanco = repository.save(newUser);
         dbService.setDefaultCategories(salvoNoBanco.getId());
@@ -78,12 +83,22 @@ public class UserService {
     }
 
     public void changePassword(TokenValidDTO objDTO) {
-        String emailRecuperado = this.tokenService.validateToken(objDTO.getToken());
-        Optional<User> userRecuperado = this.findByLogin(emailRecuperado);
+        Optional<User> userRecuperado = this.getUserForToken(objDTO.getToken());
         if(userRecuperado.isPresent()){
             String encryptedPassword = new BCryptPasswordEncoder().encode(objDTO.getSenha());
             userRecuperado.get().setPassword(encryptedPassword);
             this.repository.save(userRecuperado.get());
         }
+    }
+
+    public Boolean userIsPermissonForId(String token,Long id){
+        Optional<User> userRecuperado = this.getUserForToken(token);
+        if(userRecuperado.isPresent()){
+            if(!userRecuperado.get().getId().equals(id)){
+                throw new InvalidEnumException("Id informado no Path diferente do usuario do token");
+            }
+            return true;
+        }
+        return false;
     }
 }

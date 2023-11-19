@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 
 @Controller
@@ -32,7 +33,6 @@ public class UserController {
     private UserService service;
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private TokenService tokenService;
 
@@ -52,7 +52,9 @@ public class UserController {
         try {
             Authentication authentication = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((User)authentication.getPrincipal());
-            return ResponseEntity.ok("Bearer "+token);
+            User user = this.service.getUserForToken(token).get();
+            UserDTOforFront userFront = new UserDTOforFront(user.getId(),token );
+            return ResponseEntity.ok(userFront);
         }catch (AuthenticationException e){
             throw new InvalidEnumException("Erro para se autenticar no sistema ",e);
         }
@@ -67,7 +69,9 @@ public class UserController {
             String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
             User newUser = new User(data.getEmail(),encryptedPassword,data.getName(),data.getRole());
             this.service.addUser(newUser);
-            return ResponseEntity.ok().build();
+            Optional<User> userRecup = this.service.findByLogin(newUser.getEmail());
+            UserDTOforFront userFront = new UserDTOforFront(userRecup.get().getId(),this.tokenService.generateToken(userRecup.get()));
+            return ResponseEntity.ok().body(userFront);
         }catch (RuntimeException e){
             throw new InvalidEnumException("Erro ao tentar cadastrar",e);
         }
@@ -90,7 +94,7 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "http://locahost:3000")
-    @Operation(summary = "Confirma o email de usuario, e altera a senha", method = "POST")
+    @Operation(summary = "Confirma o email de usuario, e altera a senha", method = "PUT")
     @PutMapping("/changePassword")
     public ResponseEntity changePassword(@RequestBody @Valid TokenValidDTO objDTO) {
         this.service.changePassword(objDTO);

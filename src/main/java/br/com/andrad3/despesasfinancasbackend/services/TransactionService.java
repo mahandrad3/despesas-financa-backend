@@ -1,5 +1,7 @@
 package br.com.andrad3.despesasfinancasbackend.services;
 
+import br.com.andrad3.despesasfinancasbackend.domain.Account;
+import br.com.andrad3.despesasfinancasbackend.domain.Category;
 import br.com.andrad3.despesasfinancasbackend.domain.Transaction;
 import br.com.andrad3.despesasfinancasbackend.dtos.TransactionDTO;
 import br.com.andrad3.despesasfinancasbackend.repositories.AccountRepository;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.channels.AcceptPendingException;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -19,9 +22,11 @@ public class TransactionService {
     AccountRepository accountRepository;
 
 //    public void addTransaction(TransactionDTO objDTO){
-//        objDTO.setId(null);
+//        Optional<Account> account = accountRepository.findById(objDTO.getIdAccount());
+//        Optional<Category>
 //
-//        Transaction transaction = new Transaction(objDTO);
+//
+//
 //
 //    }
 

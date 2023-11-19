@@ -3,11 +3,10 @@ package br.com.andrad3.despesasfinancasbackend.domain;
 import br.com.andrad3.despesasfinancasbackend.domain.enums.UserRole;
 import br.com.andrad3.despesasfinancasbackend.dtos.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,8 @@ import java.util.Collection;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor //cONSTRUTOR VAZIO SPRING FUNCIONAR
 @AllArgsConstructor
 @Entity
@@ -32,6 +32,7 @@ public class User  implements Serializable, UserDetails {
     @Column(name = "nome", length = 45)
     private String name;
     @NotNull
+    @JsonIgnore
     @Column(name = "password")
     private String password;
     @NotNull
@@ -40,8 +41,10 @@ public class User  implements Serializable, UserDetails {
     @Column(name = "dataCriacao")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate creationDate = LocalDate.now();
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> categories;
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Account> contas;
     private UserRole role;
