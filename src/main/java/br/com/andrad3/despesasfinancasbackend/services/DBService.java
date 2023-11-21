@@ -54,7 +54,7 @@ public class DBService {
         Account account;
         Optional<User> userRecuperado = userRepository.findById(id);
         if(userRecuperado.isPresent()){
-            account = new Account(null,"Conta Principal",BigDecimal.ZERO,userRecuperado.get(),null);
+            account = new Account(null,"Conta Principal",userRecuperado.get(),null);
             accountRepository.save(account);
         }
     }

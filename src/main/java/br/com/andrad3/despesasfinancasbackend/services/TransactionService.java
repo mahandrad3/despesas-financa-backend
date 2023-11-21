@@ -1,6 +1,7 @@
 package br.com.andrad3.despesasfinancasbackend.services;
 
 import br.com.andrad3.despesasfinancasbackend.Exceptions.InvalidEnumException;
+import br.com.andrad3.despesasfinancasbackend.domain.Account;
 import br.com.andrad3.despesasfinancasbackend.domain.Category;
 import br.com.andrad3.despesasfinancasbackend.domain.Transaction;
 import br.com.andrad3.despesasfinancasbackend.domain.User;
@@ -12,6 +13,8 @@ import br.com.andrad3.despesasfinancasbackend.repositories.TransactionRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,6 +61,41 @@ public class TransactionService {
         }
 
     }
+    public void removeTransaction(TransactionDTO  transactionDTO){
+        Optional<Transaction> transaction = this.transactionRepository.findById(transactionDTO.getIdTransaction());
+        transaction.ifPresent(value -> this.transactionRepository.delete(value));
+    }
+
+    public void alterarTransacao(TransactionDTO transactionDTO) {
+        this.transactionRepository.findById(transactionDTO.getIdTransaction())
+                .map(transactionRecuperada -> {
+                    Transaction novaTransaction = new Transaction(transactionDTO);
+                    this.transactionRepository.save(novaTransaction);
+                    return novaTransaction;
+                })
+                .orElseThrow(() -> new InvalidEnumException("Transação não encontrada com o ID: " + transactionDTO.getIdTransaction()));
+    }
+
+
+    public List<Transaction> getAllTransactionForId(Long id,String token) {
+        User user = this.userService.getUserForToken(token).get();
+        if(this.userService.userIsPermissonForId(token, id)){
+            List<Transaction> transactions = new ArrayList<>();
+            List<Account> accounts = user.getContas();
+            for(Account account : accounts){
+                if(account.getTransactions() !=null){
+                    transactions.addAll(account.getTransactions());
+                }
+            }
+            if(transactions.isEmpty()){
+                throw new InvalidEnumException("Nenhuma transacao encontrada nesse usuario");
+            }
+            return  transactions;
+        }
+        return null;
+    }
+
+
 }
 
 

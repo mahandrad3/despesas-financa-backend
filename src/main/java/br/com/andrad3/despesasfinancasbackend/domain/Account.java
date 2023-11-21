@@ -21,18 +21,18 @@ public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private BigDecimal saldo;
+
     @JsonIgnore
     @ManyToOne
     private User user;
     @JsonIgnore
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 
     public Account(AccountDTO objDTO) {
         this.id = objDTO.getId();
         this.name = objDTO.getName();
-        this.saldo = objDTO.getSaldo();
+
         this.user = objDTO.getUser();
         this.transactions = objDTO.getTransactions();
     }

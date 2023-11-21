@@ -1,6 +1,7 @@
 package br.com.andrad3.despesasfinancasbackend.domain;
 
 import br.com.andrad3.despesasfinancasbackend.domain.enums.TypeTransaction;
+import br.com.andrad3.despesasfinancasbackend.dtos.CategoryDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,12 @@ public class Category implements Serializable {
     @JsonIgnore
     @ManyToOne
     private User user;
+
+    public Category(CategoryDTO objDTO , User user){
+        this.nome = objDTO.getNome();
+        this.idCon = objDTO.getIdCon();
+        this.tipo = objDTO.getTipo();
+        this.user = user;
+    }
 
 }

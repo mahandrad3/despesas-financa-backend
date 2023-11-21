@@ -1,7 +1,9 @@
 package br.com.andrad3.despesasfinancasbackend.domain;
 
 import br.com.andrad3.despesasfinancasbackend.domain.enums.TypeTransaction;
+import br.com.andrad3.despesasfinancasbackend.dtos.TransactionDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +31,18 @@ public class Transaction implements Serializable {
     @Enumerated(EnumType.STRING)
     private TypeTransaction type;
     @ManyToOne
+    @JsonIgnore
     private Account account;
+
+    public Transaction(TransactionDTO transactionDTO){
+        this.id = transactionDTO.getIdTransaction();
+        this.valor = transactionDTO.getValor();
+        this.idCategory = transactionDTO.getIdCategory();
+        this.descricao = transactionDTO.getDescricao();
+        this.creationDate = transactionDTO.getDataTransacao();
+        this.type = transactionDTO.getTipoTransacao();
+        this.account = transactionDTO.getAccount();
+
+    }
 
 }

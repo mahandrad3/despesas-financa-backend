@@ -29,7 +29,7 @@ public class AccountService {
 
     public Account createAccount(AccountDTO objDTO) {
         objDTO.setId(null);
-        return accountRepository.save(new Account(objDTO.getId(),objDTO.getName(), objDTO.getSaldo(),objDTO.getUser(),objDTO.getTransactions()));
+        return accountRepository.save(new Account(objDTO.getId(),objDTO.getName(),objDTO.getUser(),objDTO.getTransactions()));
     }
 
     public void deleteAccount(Long id){
