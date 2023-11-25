@@ -7,7 +7,6 @@ import br.com.andrad3.despesasfinancasbackend.domain.Transaction;
 import br.com.andrad3.despesasfinancasbackend.domain.User;
 import br.com.andrad3.despesasfinancasbackend.domain.enums.TypeTransaction;
 import br.com.andrad3.despesasfinancasbackend.dtos.TransactionDTO;
-import br.com.andrad3.despesasfinancasbackend.repositories.AccountRepository;
 import br.com.andrad3.despesasfinancasbackend.repositories.CategoryRepository;
 import br.com.andrad3.despesasfinancasbackend.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class TransactionService {
     @Autowired
     UserService userService;
 
-    public void addTransaction(TransactionDTO objDTO, String token) {
+    public Transaction addTransaction(TransactionDTO objDTO, String token) {
         User user = this.userService.getUserForToken(token).get();
         if (this.userService.userIsPermissonForId(token, objDTO.getIdUser())) {
             Category category;
@@ -54,12 +53,13 @@ public class TransactionService {
                 Transaction transaction = new Transaction(null,objDTO.getValor(),category.getId(),
                         objDTO.getDescricao(), objDTO.getDataTransacao(),objDTO.getTipoTransacao(),
                         objDTO.getAccount());
-                this.transactionRepository.save(transaction);
+                Transaction transactionSalvada = this.transactionRepository.save(transaction);
+                return transactionSalvada;
             }catch (Exception e){
                 throw new InvalidEnumException("Erro ao tentar criar e salvar a transacao");
             }
         }
-
+        return null;
     }
     public void removeTransaction(TransactionDTO  transactionDTO){
         Optional<Transaction> transaction = this.transactionRepository.findById(transactionDTO.getIdTransaction());

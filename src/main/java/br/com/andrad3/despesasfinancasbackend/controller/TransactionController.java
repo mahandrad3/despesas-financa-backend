@@ -32,8 +32,8 @@ public class TransactionController {
     @PostMapping("/addTransacao")
    public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionDTO objBody,@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
         String token = ReutilizarCodigo.extractTokenFromAuthorizationHeader(authorizationHeader);
-        this.transactionService.addTransaction(objBody,token);
-        return ResponseEntity.ok().build();
+        Transaction transaction = this.transactionService.addTransaction(objBody,token);
+        return ResponseEntity.ok().body(transaction);
    }
     @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Deleta uma transacao", method = "DELETE")
