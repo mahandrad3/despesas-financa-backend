@@ -19,7 +19,7 @@ spring:
     show-sql: false
 jwt:
   secret: VkRGU1JsTXdkRVpVYTFaSlZsVXhRMVF3YkZCVVJXeFBVMFZGUFE9PQ==
-  expiration: 2
+  expiration: 24
   expiration-email: 15
 
 

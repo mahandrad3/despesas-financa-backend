@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,12 +33,18 @@ public class AccountController {
 
 
     @Operation(summary = "Busca todas as contas vinculadas ao id", method = "GET")
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<List<Account>> findAll(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    @GetMapping(value = "/findAllAccounts/{id}")
+    public ResponseEntity<List<AccountDTO>> findAll(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         String token = extractTokenFromAuthorizationHeader(authorizationHeader);
         if(this.userService.userIsPermissonForId(token,id)) {
             List<Account> accountList = this.accountService.findAllById(id);
-            return ResponseEntity.ok().body(accountList);
+            List<AccountDTO> accountBody = new ArrayList<>();
+            for(Account account: accountList){
+                account.setTransactions(null);
+                account.setUser(null);
+                accountBody.add(new AccountDTO(account.getId(),account.getName(),account.getUser()));
+            }
+            return ResponseEntity.ok().body(accountBody);
         }
         return ResponseEntity.badRequest().build();
     }
@@ -45,11 +52,19 @@ public class AccountController {
     @Operation(summary = "cria uma nova conta", method = "POST")
     @PostMapping
     public ResponseEntity<AccountDTO> create(@RequestBody AccountDTO objDTO) {
+        if(objDTO.getName() == null) throw new InvalidEnumException("Campo nome nao pode ser nulo ou vazio");
         accountService.createAccount(objDTO);
         return ResponseEntity.created(null).build();
     }
 
-    @Operation(summary = "Deleta UMA CONTA", method = "DELETE")
+    @Operation(summary = "Traz a conta pelo id , e as suas transacoes", method = "POST")
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<Account> findAccountById(@PathVariable Long id){
+        Account account = this.accountService.findById(id);
+        return ResponseEntity.ok().body(account);
+    }
+
+    @Operation(summary = "Deleta uma conta", method = "DELETE")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> delete(@PathVariable Long id) {
         accountService.deleteAccount(id);

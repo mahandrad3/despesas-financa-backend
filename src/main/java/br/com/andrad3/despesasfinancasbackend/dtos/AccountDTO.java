@@ -26,5 +26,11 @@ public class AccountDTO {
         this.transactions = transactions;
     }
 
+    public AccountDTO(Long id, String name,User user) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+    }
+
 
 }

@@ -79,7 +79,7 @@ public class UserController {
 
     @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Envia um email para trocar a senha", method = "POST")
-    @PostMapping("/changePassword")
+    @PostMapping("/sendEmailResetPassword")
     public ResponseEntity changePassword(@RequestBody @Valid CredenciaisForResetEmailDTO credenciaisForResetEmailDTO) throws MessagingException {
         this.service.sendEmailForPassword(credenciaisForResetEmailDTO.getEmail());
         return ResponseEntity.ok().build();
