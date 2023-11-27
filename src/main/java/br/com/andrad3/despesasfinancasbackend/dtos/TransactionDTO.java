@@ -20,6 +20,7 @@ public class TransactionDTO {
     private BigDecimal valor;
     private Long idCategory;
     private String descricao;
+    private Long idAccount;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataTransacao;
@@ -27,4 +28,6 @@ public class TransactionDTO {
     private TypeTransaction tipoTransacao;
     @NotNull
     private Account account;
+
+
 }

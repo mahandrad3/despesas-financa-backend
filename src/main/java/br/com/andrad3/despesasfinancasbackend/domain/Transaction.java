@@ -33,6 +33,8 @@ public class Transaction implements Serializable {
     @ManyToOne
     @JsonIgnore
     private Account account;
+    private Long idAccount;
+
 
     public Transaction(TransactionDTO transactionDTO){
         this.id = transactionDTO.getIdTransaction();
@@ -42,7 +44,7 @@ public class Transaction implements Serializable {
         this.creationDate = transactionDTO.getDataTransacao();
         this.type = transactionDTO.getTipoTransacao();
         this.account = transactionDTO.getAccount();
-
+        this.idAccount = transactionDTO.getIdAccount();
     }
 
 }

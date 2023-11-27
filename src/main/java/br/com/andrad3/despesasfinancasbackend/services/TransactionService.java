@@ -52,7 +52,7 @@ public class TransactionService {
             try{
                 Transaction transaction = new Transaction(null,objDTO.getValor(),category.getId(),
                         objDTO.getDescricao(), objDTO.getDataTransacao(),objDTO.getTipoTransacao(),
-                        objDTO.getAccount());
+                        objDTO.getAccount(),objDTO.getIdAccount());
                 Transaction transactionSalvada = this.transactionRepository.save(transaction);
                 return transactionSalvada;
             }catch (Exception e){
@@ -61,12 +61,31 @@ public class TransactionService {
         }
         return null;
     }
-    public void removeTransaction(TransactionDTO  transactionDTO){
-        Optional<Transaction> transaction = this.transactionRepository.findById(transactionDTO.getIdTransaction());
+    public void removeTransaction(Long id){
+        Optional<Transaction> transaction = this.transactionRepository.findById(id);
         transaction.ifPresent(value -> this.transactionRepository.delete(value));
     }
 
     public void alterarTransacao(TransactionDTO transactionDTO) {
+        Category category;
+        if (transactionDTO.getIdCategory() != null) {
+            category = this.categoryRepository.findById(transactionDTO.getIdCategory()).get();
+        }else{
+            if(TypeTransaction.RECEITA == transactionDTO.getTipoTransacao()){
+                category = this.categoryRepository.findByTypeEnumForIdAndName(
+                        transactionDTO.getIdUser(),
+                        transactionDTO.getTipoTransacao(),
+                        "Outras receitas"
+                );
+            }else{
+                category = this.categoryRepository.findByTypeEnumForIdAndName(
+                        transactionDTO.getIdUser(),
+                        transactionDTO.getTipoTransacao(),
+                        "Outros"
+                );
+            }
+        }
+        transactionDTO.setIdCategory(category.getId());
         this.transactionRepository.findById(transactionDTO.getIdTransaction())
                 .map(transactionRecuperada -> {
                     Transaction novaTransaction = new Transaction(transactionDTO);

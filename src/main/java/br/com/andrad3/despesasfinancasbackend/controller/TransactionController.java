@@ -37,20 +37,20 @@ public class TransactionController {
    }
     @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Deleta uma transacao", method = "DELETE")
-    @DeleteMapping("/remTransacao")
-   public ResponseEntity<Transaction> deleteTransaction(@RequestBody TransactionDTO objBody){
-        this.transactionService.removeTransaction(objBody);
+    @DeleteMapping("/remTransacao/{id}")
+   public ResponseEntity<Transaction> deleteTransaction(@PathVariable Long id){
+        this.transactionService.removeTransaction(id);
         return ResponseEntity.ok().build();
    }
     @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Altera uma transacao", method = "PUT")
     @PutMapping("/alteraTransacao")
-   public ResponseEntity<Transaction> alterarTransaction(@RequestBody TransactionDTO objBody){
+   public ResponseEntity<TransactionDTO> alterarTransaction(@RequestBody TransactionDTO objBody){
         this.transactionService.alterarTransacao(objBody);
         return ResponseEntity.ok().build();
    }
     @CrossOrigin(origins = "http://locahost:3000")
-    @Operation(summary = "Altera uma transacao", method = "GET")
+    @Operation(summary = "busca todas transacao", method = "GET")
     @GetMapping("/getTransacoes/{id}")
    public ResponseEntity<List<Transaction>> getAllTransaction(@PathVariable("id")Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
         String token = ReutilizarCodigo.extractTokenFromAuthorizationHeader(authorizationHeader);
