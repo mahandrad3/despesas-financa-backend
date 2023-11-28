@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor //cONSTRUTOR VAZIO SPRING FUNCIONAR
-@AllArgsConstructor
+
 @Entity
 public class Transaction implements Serializable {
 
@@ -34,7 +34,9 @@ public class Transaction implements Serializable {
     @JsonIgnore
     private Account account;
     private Long idAccount;
-
+    private Boolean recorencia;
+    private Integer parcelas;
+    private Long idTransacaoPai;
 
     public Transaction(TransactionDTO transactionDTO){
         this.id = transactionDTO.getIdTransaction();
@@ -45,6 +47,48 @@ public class Transaction implements Serializable {
         this.type = transactionDTO.getTipoTransacao();
         this.account = transactionDTO.getAccount();
         this.idAccount = transactionDTO.getIdAccount();
+    }
+
+
+    public Transaction(Long idTransaction,BigDecimal valor,Long idCategory,String descricao,
+                       LocalDate localDate,TypeTransaction type,Account account,
+                       Long idAccount,Boolean recorencia, Integer parcelas){
+        this.id = idTransaction;
+        this.valor = valor;
+        this.idCategory = idCategory;
+        this.descricao = descricao;
+        this.creationDate = localDate;
+        this.type = type;
+        this.account = account;
+        this.idAccount = idAccount;
+        this.recorencia = recorencia;
+        this.parcelas = parcelas;
+    }
+    public Transaction(Long idTransaction,BigDecimal valor,Long idCategory,String descricao,
+                       LocalDate localDate,TypeTransaction type,Account account,
+                       Long idAccount,Boolean recorencia, Long idTransacaoPai){
+        this.id = idTransaction;
+        this.valor = valor;
+        this.idCategory = idCategory;
+        this.descricao = descricao;
+        this.creationDate = localDate;
+        this.type = type;
+        this.account = account;
+        this.idAccount = idAccount;
+        this.recorencia = recorencia;
+        this.idTransacaoPai = idTransacaoPai;
+    }
+    public Transaction(Long idTransaction,BigDecimal valor,Long idCategory,String descricao,
+                       LocalDate localDate,TypeTransaction type,Account account,
+                       Long idAccount){
+        this.id = idTransaction;
+        this.valor = valor;
+        this.idCategory = idCategory;
+        this.descricao = descricao;
+        this.creationDate = localDate;
+        this.type = type;
+        this.account = account;
+        this.idAccount = idAccount;
     }
 
 }

@@ -12,6 +12,7 @@ import br.com.andrad3.despesasfinancasbackend.repositories.TransactionRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,27 @@ public class TransactionService {
                 }
             }
             try{
+                if(objDTO.getRecorencia()){
+                    if(objDTO.getParcelas() >= 2){
+                        BigDecimal valorParcela = objDTO.getValor().divide(BigDecimal.valueOf(objDTO.getParcelas()));
+                        //fix 2
+                        Transaction transaction = new Transaction(null,valorParcela,category.getId(),
+                                objDTO.getDescricao()+" 1/"+objDTO.getParcelas(), objDTO.getDataTransacao(),objDTO.getTipoTransacao(),
+                                objDTO.getAccount(),objDTO.getIdAccount(),objDTO.getRecorencia(),objDTO.getParcelas());
+                        Transaction transactionPai = this.transactionRepository.save(transaction);
+
+                        for(int i= 2; i <= objDTO.getParcelas();i++){
+                            Transaction transactionfilhas = new Transaction(null,valorParcela,category.getId(),
+                                    objDTO.getDescricao()+" "+i+"/"+transactionPai.getParcelas(), objDTO.getDataTransacao().plusMonths(i-1),objDTO.getTipoTransacao(),
+                                    objDTO.getAccount(),objDTO.getIdAccount(),objDTO.getRecorencia(),transactionPai.getId());
+                            this.transactionRepository.save(transactionfilhas);
+                        }
+
+                        return  transactionPai;
+
+                    }
+
+                }
                 Transaction transaction = new Transaction(null,objDTO.getValor(),category.getId(),
                         objDTO.getDescricao(), objDTO.getDataTransacao(),objDTO.getTipoTransacao(),
                         objDTO.getAccount(),objDTO.getIdAccount());

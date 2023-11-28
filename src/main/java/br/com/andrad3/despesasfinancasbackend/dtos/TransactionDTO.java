@@ -21,6 +21,8 @@ public class TransactionDTO {
     private Long idCategory;
     private String descricao;
     private Long idAccount;
+    private Boolean recorencia;
+    private Integer parcelas;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataTransacao;

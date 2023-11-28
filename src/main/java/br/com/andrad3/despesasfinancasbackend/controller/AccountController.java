@@ -51,10 +51,10 @@ public class AccountController {
 
     @Operation(summary = "cria uma nova conta", method = "POST")
     @PostMapping
-    public ResponseEntity<AccountDTO> create(@RequestBody AccountDTO objDTO) {
+    public ResponseEntity<Account> create(@RequestBody AccountDTO objDTO) {
         if(objDTO.getName() == null) throw new InvalidEnumException("Campo nome nao pode ser nulo ou vazio");
-        accountService.createAccount(objDTO);
-        return ResponseEntity.created(null).build();
+        Account acccount = accountService.createAccount(objDTO);
+        return ResponseEntity.ok().body(acccount);
     }
 
     @Operation(summary = "Traz a conta pelo id , e as suas transacoes", method = "POST")
