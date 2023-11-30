@@ -71,6 +71,16 @@ public class AccountController {
         return ResponseEntity.created(null).build();
     }
 
+    @Operation(summary = "EDita uma account", method = "PUT")
+    @PutMapping(value = "/editar")
+    public ResponseEntity<AccountDTO> updateAccount(@RequestBody AccountDTO accountDTO){
+        accountService.updateAccount(accountDTO);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
     private String extractTokenFromAuthorizationHeader(String authHeader) {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);

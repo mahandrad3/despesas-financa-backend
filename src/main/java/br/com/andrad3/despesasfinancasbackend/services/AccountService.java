@@ -1,5 +1,6 @@
 package br.com.andrad3.despesasfinancasbackend.services;
 
+import br.com.andrad3.despesasfinancasbackend.Exceptions.InvalidEnumException;
 import br.com.andrad3.despesasfinancasbackend.domain.Account;
 import br.com.andrad3.despesasfinancasbackend.dtos.AccountDTO;
 import br.com.andrad3.despesasfinancasbackend.repositories.AccountRepository;
@@ -41,7 +42,14 @@ public class AccountService {
         }
     }
 
-    public Account updateAccount(AccountDTO accountDTO){
-        return this.createAccount(accountDTO);
+    public void updateAccount(AccountDTO accountDTO){
+        Optional<Account> accountRecuperada = this.accountRepository.findById(accountDTO.getId());
+        if(accountRecuperada.isPresent()){
+            accountRecuperada.get().setName(accountDTO.getName());
+            this.accountRepository.save(accountRecuperada.get());
+            return;
+        }
+        throw new InvalidEnumException("Account nao encontrada pelo Id");
     }
+
 }
