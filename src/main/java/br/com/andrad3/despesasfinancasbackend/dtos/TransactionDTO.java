@@ -23,6 +23,7 @@ public class TransactionDTO {
     private Long idAccount;
     private Boolean recorencia;
     private Integer parcelas;
+    private Boolean isPaga;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataTransacao;

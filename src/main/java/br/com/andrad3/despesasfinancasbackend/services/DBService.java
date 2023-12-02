@@ -32,20 +32,23 @@ public class DBService {
         Optional<User> userRecuperado = userRepository.findById(id);
         userRecuperado.ifPresent(user ->{
             //DESPESAS
-            categories.add(new Category(null,"Alimentação",2, TypeTransaction.DESPESA,user));
-            categories.add(new Category(null,"Assinaturas e serviços",2, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Alimentação",8, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Assinaturas e serviços",5, TypeTransaction.DESPESA,user));
             categories.add(new Category(null,"Bares e restaurantes",2, TypeTransaction.DESPESA,user));
-            categories.add(new Category(null,"Casa",2, TypeTransaction.DESPESA,user));
-            categories.add(new Category(null,"Investimentos",2, TypeTransaction.DESPESA,user));
-            categories.add(new Category(null,"Saude",2, TypeTransaction.DESPESA,user));
-            categories.add(new Category(null,"Mercado",2, TypeTransaction.DESPESA,user));
-            categories.add(new Category(null,"Lazer e hobbies",2, TypeTransaction.DESPESA,user));
-            categories.add(new Category(null,"Outros",2, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Casa",6, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Saude",7, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Mercado",15, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Lazer e hobbies",9, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Outros",19, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Pets",4, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Roupas",11, TypeTransaction.DESPESA,user));
+            categories.add(new Category(null,"Transporte",13, TypeTransaction.DESPESA,user));
+
             //DESPESAS
-            categories.add(new Category(null,"Empréstimos",2, TypeTransaction.RECEITA,user));
-            categories.add(new Category(null,"Investimentos",2, TypeTransaction.RECEITA,user));
-            categories.add(new Category(null,"Outras receitas",2, TypeTransaction.RECEITA,user));
-            categories.add(new Category(null,"Salário",2, TypeTransaction.RECEITA,user));
+            categories.add(new Category(null,"Empréstimos",18, TypeTransaction.RECEITA,user));
+            categories.add(new Category(null,"Investimentos",20, TypeTransaction.RECEITA,user));
+            categories.add(new Category(null,"Outras receitas",19, TypeTransaction.RECEITA,user));
+            categories.add(new Category(null,"Salário",21, TypeTransaction.RECEITA,user));
         });
        categoryRepository.saveAll(categories);
     }

@@ -51,30 +51,30 @@ public class TransactionService {
                 }
             }
             try{
+                if(objDTO.getIsPaga() == null){
+                    objDTO.setIsPaga(false);
+                }
                 if(objDTO.getRecorencia()){
                     if(objDTO.getParcelas() >= 2){
                         BigDecimal valorParcela = objDTO.getValor().divide(BigDecimal.valueOf(objDTO.getParcelas()));
                         //fix 2
                         Transaction transaction = new Transaction(null,valorParcela,category.getId(),
                                 objDTO.getDescricao()+" 1/"+objDTO.getParcelas(), objDTO.getDataTransacao(),objDTO.getTipoTransacao(),
-                                objDTO.getAccount(),objDTO.getIdAccount(),objDTO.getRecorencia(),objDTO.getParcelas());
+                                objDTO.getAccount(),objDTO.getIdAccount(),objDTO.getRecorencia(),objDTO.getParcelas(),objDTO.getIsPaga());
                         Transaction transactionPai = this.transactionRepository.save(transaction);
 
                         for(int i= 2; i <= objDTO.getParcelas();i++){
                             Transaction transactionfilhas = new Transaction(null,valorParcela,category.getId(),
                                     objDTO.getDescricao()+" "+i+"/"+transactionPai.getParcelas(), objDTO.getDataTransacao().plusMonths(i-1),objDTO.getTipoTransacao(),
-                                    objDTO.getAccount(),objDTO.getIdAccount(),objDTO.getRecorencia(),transactionPai.getId());
+                                    objDTO.getAccount(),objDTO.getIdAccount(),objDTO.getRecorencia(),transactionPai.getId(),objDTO.getIsPaga());
                             this.transactionRepository.save(transactionfilhas);
                         }
-
                         return  transactionPai;
-
                     }
-
                 }
                 Transaction transaction = new Transaction(null,objDTO.getValor(),category.getId(),
                         objDTO.getDescricao(), objDTO.getDataTransacao(),objDTO.getTipoTransacao(),
-                        objDTO.getAccount(),objDTO.getIdAccount());
+                        objDTO.getAccount(),objDTO.getIdAccount(),objDTO.getIsPaga());
                 Transaction transactionSalvada = this.transactionRepository.save(transaction);
                 return transactionSalvada;
             }catch (Exception e){

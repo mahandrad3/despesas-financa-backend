@@ -37,6 +37,7 @@ public class Transaction implements Serializable {
     private Boolean recorencia;
     private Integer parcelas;
     private Long idTransacaoPai;
+    private Boolean isPaga;
 
     public Transaction(TransactionDTO transactionDTO){
         this.id = transactionDTO.getIdTransaction();
@@ -47,12 +48,13 @@ public class Transaction implements Serializable {
         this.type = transactionDTO.getTipoTransacao();
         this.account = transactionDTO.getAccount();
         this.idAccount = transactionDTO.getIdAccount();
+        this.isPaga = transactionDTO.getIsPaga();
     }
 
 
     public Transaction(Long idTransaction,BigDecimal valor,Long idCategory,String descricao,
                        LocalDate localDate,TypeTransaction type,Account account,
-                       Long idAccount,Boolean recorencia, Integer parcelas){
+                       Long idAccount, Boolean recorencia, Integer parcelas, Boolean isPaga){
         this.id = idTransaction;
         this.valor = valor;
         this.idCategory = idCategory;
@@ -63,10 +65,11 @@ public class Transaction implements Serializable {
         this.idAccount = idAccount;
         this.recorencia = recorencia;
         this.parcelas = parcelas;
+        this.isPaga = isPaga;
     }
     public Transaction(Long idTransaction,BigDecimal valor,Long idCategory,String descricao,
                        LocalDate localDate,TypeTransaction type,Account account,
-                       Long idAccount,Boolean recorencia, Long idTransacaoPai){
+                       Long idAccount,Boolean recorencia, Long idTransacaoPai,Boolean isPaga){
         this.id = idTransaction;
         this.valor = valor;
         this.idCategory = idCategory;
@@ -77,10 +80,11 @@ public class Transaction implements Serializable {
         this.idAccount = idAccount;
         this.recorencia = recorencia;
         this.idTransacaoPai = idTransacaoPai;
+        this.isPaga = isPaga;
     }
     public Transaction(Long idTransaction,BigDecimal valor,Long idCategory,String descricao,
                        LocalDate localDate,TypeTransaction type,Account account,
-                       Long idAccount){
+                       Long idAccount,Boolean isPaga){
         this.id = idTransaction;
         this.valor = valor;
         this.idCategory = idCategory;
@@ -89,6 +93,7 @@ public class Transaction implements Serializable {
         this.type = type;
         this.account = account;
         this.idAccount = idAccount;
+        this.isPaga = isPaga;
     }
 
 }
