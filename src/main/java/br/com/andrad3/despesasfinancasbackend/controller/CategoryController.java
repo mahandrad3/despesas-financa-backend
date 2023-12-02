@@ -38,9 +38,9 @@ public class CategoryController {
         return ResponseEntity.ok().build();
     }
     @Operation(summary = "Deletar Category", method = "DELETE")
-    @DeleteMapping(value = "/deleteCategory")
-    public ResponseEntity<Category> deleteCategory(@RequestBody CategoryDTO categoryDTO){
-        this.categoryService.deleteCategoryForId(categoryDTO.getId());
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Category> deleteCategory(@PathVariable Long id){
+        this.categoryService.deleteCategoryForId(id);
         return ResponseEntity.ok().build();
     }
     @Operation(summary = "AlterarCategory", method = "PUT")
