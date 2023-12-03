@@ -34,8 +34,8 @@ public class CategoryController {
     @Operation(summary = "Create Category", method = "POST")
     @PostMapping(value = "/createCategory")
     public ResponseEntity<Category> createCategory(@RequestBody CategoryDTO categoryDTO){
-        this.categoryService.criarCategory(categoryDTO);
-        return ResponseEntity.ok().build();
+        Category category = this.categoryService.criarCategory(categoryDTO);
+        return ResponseEntity.ok().body(category);
     }
     @Operation(summary = "Deletar Category", method = "DELETE")
     @DeleteMapping(value = "/{id}")

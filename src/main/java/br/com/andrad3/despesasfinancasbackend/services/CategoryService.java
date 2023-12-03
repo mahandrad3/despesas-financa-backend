@@ -52,11 +52,11 @@ public class CategoryService {
 
     }
 
-    public void criarCategory(CategoryDTO categoryDTO){
+    public Category criarCategory(CategoryDTO categoryDTO){
         categoryDTO.setId(null);
         User user = this.userService.findById(categoryDTO.getUserId());
         Category category = new Category(categoryDTO,user);
-        this.categoryRepository.save(category);
+        return this.categoryRepository.save(category);
     }
 
 }
