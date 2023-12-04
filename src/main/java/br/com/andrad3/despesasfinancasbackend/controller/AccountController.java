@@ -23,6 +23,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/api/account")
 @Tag(name = "Account", description = "endpoints for account")
+@CrossOrigin(origins = {"https://coincontrol-387d4.web.app","http://coincontrol-387d4.web.app"})
 public class AccountController {
 
     @Autowired
@@ -85,15 +86,11 @@ public class AccountController {
         return ResponseEntity.ok().body(accountList);
     }
 
-
-
-
     private String extractTokenFromAuthorizationHeader(String authHeader) {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);
         }
         return null;
     }
-
 
 }

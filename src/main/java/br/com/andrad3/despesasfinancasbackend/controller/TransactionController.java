@@ -19,6 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/transaction")
 @Tag(name = "Transacao", description = "endpoints para transacoes Despesas/Receitas")
+@CrossOrigin(origins = {"https://coincontrol-387d4.web.app","http://coincontrol-387d4.web.app"})
 public class TransactionController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class TransactionController {
     @Autowired
     UserService userService;
 
-    @CrossOrigin(origins = "http://locahost:3000")
+
     @Operation(summary = "Cadastra uma transacao", method = "POST")
     @PostMapping("/addTransacao")
    public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionDTO objBody,@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
@@ -35,21 +36,21 @@ public class TransactionController {
         Transaction transaction = this.transactionService.addTransaction(objBody,token);
         return ResponseEntity.ok().body(transaction);
    }
-    @CrossOrigin(origins = "http://locahost:3000")
+
     @Operation(summary = "Deleta uma transacao", method = "DELETE")
     @DeleteMapping("/remTransacao/{id}")
    public ResponseEntity<Transaction> deleteTransaction(@PathVariable Long id){
         this.transactionService.removeTransaction(id);
         return ResponseEntity.ok().build();
    }
-    @CrossOrigin(origins = "http://locahost:3000")
+
     @Operation(summary = "Altera uma transacao", method = "PUT")
     @PutMapping("/alteraTransacao")
    public ResponseEntity<Transaction> alterarTransaction(@RequestBody TransactionDTO objBody){
         Transaction transaction = this.transactionService.alterarTransacao(objBody);
         return ResponseEntity.ok().body(transaction);
    }
-    @CrossOrigin(origins = "http://locahost:3000")
+
     @Operation(summary = "busca todas transacao", method = "GET")
     @GetMapping("/getTransacoes/{id}")
    public ResponseEntity<List<Transaction>> getAllTransaction(@PathVariable("id")Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){

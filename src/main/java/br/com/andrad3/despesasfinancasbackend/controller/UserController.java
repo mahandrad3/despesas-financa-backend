@@ -27,6 +27,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/api/user")
 @Tag(name = "User", description = "endpoints for users, auth")
+@CrossOrigin(origins = {"https://coincontrol-387d4.web.app","http://coincontrol-387d4.web.app"})
 public class UserController {
 
     @Autowired
@@ -42,7 +43,7 @@ public class UserController {
         User objRecuperado = service.findById(id);
         return ResponseEntity.ok().body(objRecuperado);
     }
-    @CrossOrigin(origins = "http://locahost:3000")
+
     @Operation(summary = "Realizar o login", method = "POST")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody  loginDTO data){
@@ -60,7 +61,7 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "http://locahost:3000")
+
     @Operation(summary = "Registra um novo usuario", method = "POST")
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
@@ -77,7 +78,7 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "http://locahost:3000")
+
     @Operation(summary = "Envia um email para trocar a senha", method = "POST")
     @PostMapping("/sendEmailResetPassword")
     public ResponseEntity changePassword(@RequestBody @Valid CredenciaisForResetEmailDTO credenciaisForResetEmailDTO) throws MessagingException {
@@ -85,7 +86,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @Operation(summary = "Verifica se o token é valido", method = "POST")
     @PostMapping("/validIsToken")
     public ResponseEntity validToken(@RequestBody @Valid TokenValidDTO objDTO){
@@ -93,7 +94,7 @@ public class UserController {
         return  ResponseEntity.ok().build();
     }
 
-    @CrossOrigin(origins = "http://locahost:3000")
+
     @Operation(summary = "Confirma o email de usuario, e altera a senha", method = "PUT")
     @PutMapping("/changePassword")
     public ResponseEntity changePassword(@RequestBody @Valid TokenValidDTO objDTO) {

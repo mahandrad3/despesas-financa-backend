@@ -18,6 +18,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/api/category")
 @Tag(name = "Category", description = "endpoints for category")
+@CrossOrigin(origins = {"https://coincontrol-387d4.web.app","http://coincontrol-387d4.web.app"})
 public class CategoryController {
 
     @Autowired
