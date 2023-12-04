@@ -82,8 +82,8 @@ public class AccountController {
 
     @Operation(summary = "Trazer todas as contas e suas transacoes", method = "GET")
     @GetMapping(value = "/getAccountsForTransactions/{id}")
-    public ResponseEntity<List<Account>>  alterarCategory(@PathVariable Long idUser){
-        List<Account> accountList = this.accountService.findAllById(idUser);
+    public ResponseEntity<List<Account>>  trazerAccounts(@PathVariable("id") Long id){
+        List<Account> accountList = this.accountService.findAllById(id);
         return ResponseEntity.ok().body(accountList);
     }
 
