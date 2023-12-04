@@ -24,7 +24,7 @@ public class EmailSenderService {
 
         helper.setFrom("coincontroltcc@gmail.com");
         helper.setTo(toEmail);
-        helper.setSubject("Recuperação de Senha: Instruções Simples para Trocar na CoinControl");
+        helper.setSubject("Recuperação de Senha: Instruções simples para trocar de senha no sistema CoinControl");
         helper.setText(buildResetPasswordEmail(user.getName(),tokenService.generateTokenEmail(user)), true);
 
         mailSender.send(message);
@@ -34,7 +34,7 @@ public class EmailSenderService {
 
 
     public static String buildResetPasswordEmail(String name, String token) {
-        String URL = "http://localhost:3000/resetPassword?username=" + name + "&token=" + token;
+        String URL = "https://coincontrol-387d4.web.app/resetPassword?username=" + name + "&token=" + token;
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
