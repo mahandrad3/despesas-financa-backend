@@ -32,8 +32,6 @@ public class AccountController {
     private UserService userService;
 
 
-
-
     @Operation(summary = "Busca todas as contas vinculadas ao id", method = "GET")
     @GetMapping(value = "/findAllAccounts/{id}")
     public ResponseEntity<List<AccountDTO>> findAll(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {

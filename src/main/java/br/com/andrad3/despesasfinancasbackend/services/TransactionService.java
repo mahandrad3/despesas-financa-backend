@@ -86,13 +86,11 @@ public class TransactionService {
     public void removeTransaction(Long id){
         Optional<Transaction> transaction = this.transactionRepository.findById(id);
         if(transaction.isPresent()){
-            Transaction transacao = transaction.get();
-            if(transacao.getRecorencia() && (transacao.getParcelas() != null)){
-              List<Transaction> transactions =   this.transactionRepository.findAllTransactionsByParentId(transacao.getId());
-
+            if(transaction.get().getParcelas() != null){
+              List<Transaction> transactions =   this.transactionRepository.findAllTransactionsByParentId(transaction.get().getId());
               this.transactionRepository.deleteAll(transactions);
             }
-            this.transactionRepository.delete(transacao);
+            this.transactionRepository.delete(transaction.get());
         }
     }
 
