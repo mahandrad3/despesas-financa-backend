@@ -8,7 +8,7 @@ spring:
     properties.mail.smtp.starttls.enable: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/despesas_financas_tcc?useTimezone=true&serverTimezone=UTC
+    url: jdbc:mysql://google/despesa_financas_tcc?cloudSqlInstance=stable-dogfish-407015:us-central1:mydbdespesastcc&socketFactory=com.google.cloud.sql.mysql.SocketFactory
     username: root
     password: admin123
   jpa:
