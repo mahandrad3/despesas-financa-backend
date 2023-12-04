@@ -2,23 +2,23 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${USERNAME_SMTP}
-    password: ${PASSWORD_SMTP}
+    username: coincontroltcc@gmail.com
+    password: cxlg aouf mydt vnmn
     properties.mail.smtp.auth: true
     properties.mail.smtp.starttls.enable: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: jdbc:mysql://coincontroldb.ckxzgaohpes2.us-east-2.rds.amazonaws.com:3306/coincontroltcc
+    username: root
+    password: 987;.,asd
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
+    show-sql: false
 jwt:
-  secret: ${JWT_SECRET}
+  secret: VkRGU1JsTXdkRVpVYTFaSlZsVXhRMVF3YkZCVVJXeFBVMFZGUFE9PQ==
   expiration: 24
   expiration-email: 15
 

@@ -14,7 +14,7 @@
 	<name>despesas-financas-backend</name>
 	<description>Project backend - TCC (FATEC)</description>
 	<properties>
-		<java.version>18</java.version>
+		<java.version>17</java.version>
 		<dozer.version>6.4.0</dozer.version>
 		<springdoc.version>2.0.2</springdoc.version>
 	</properties>
