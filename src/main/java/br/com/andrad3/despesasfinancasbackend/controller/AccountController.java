@@ -2,8 +2,10 @@ package br.com.andrad3.despesasfinancasbackend.controller;
 
 import br.com.andrad3.despesasfinancasbackend.Exceptions.InvalidEnumException;
 import br.com.andrad3.despesasfinancasbackend.domain.Account;
+import br.com.andrad3.despesasfinancasbackend.domain.Category;
 import br.com.andrad3.despesasfinancasbackend.domain.User;
 import br.com.andrad3.despesasfinancasbackend.dtos.AccountDTO;
+import br.com.andrad3.despesasfinancasbackend.dtos.CategoryDTO;
 import br.com.andrad3.despesasfinancasbackend.services.AccountService;
 import br.com.andrad3.despesasfinancasbackend.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,6 +78,13 @@ public class AccountController {
     public ResponseEntity<AccountDTO> updateAccount(@RequestBody AccountDTO accountDTO){
         accountService.updateAccount(accountDTO);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Trazer todas as contas e suas transacoes", method = "GET")
+    @GetMapping(value = "/getAccountsForTransactions/{id}")
+    public ResponseEntity<List<Account>>  alterarCategory(@PathVariable Long idUser){
+        List<Account> accountList = this.accountService.findAllById(idUser);
+        return ResponseEntity.ok().body(accountList);
     }
 
 
