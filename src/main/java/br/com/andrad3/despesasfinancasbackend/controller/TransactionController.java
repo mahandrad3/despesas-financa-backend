@@ -45,9 +45,9 @@ public class TransactionController {
     @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "Altera uma transacao", method = "PUT")
     @PutMapping("/alteraTransacao")
-   public ResponseEntity<TransactionDTO> alterarTransaction(@RequestBody TransactionDTO objBody){
-        this.transactionService.alterarTransacao(objBody);
-        return ResponseEntity.ok().build();
+   public ResponseEntity<Transaction> alterarTransaction(@RequestBody TransactionDTO objBody){
+        Transaction transaction = this.transactionService.alterarTransacao(objBody);
+        return ResponseEntity.ok().body(transaction);
    }
     @CrossOrigin(origins = "http://locahost:3000")
     @Operation(summary = "busca todas transacao", method = "GET")

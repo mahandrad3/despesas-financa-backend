@@ -1,6 +1,7 @@
 package br.com.andrad3.despesasfinancasbackend.dtos;
 
 import br.com.andrad3.despesasfinancasbackend.domain.Account;
+import br.com.andrad3.despesasfinancasbackend.domain.Transaction;
 import br.com.andrad3.despesasfinancasbackend.domain.enums.TypeTransaction;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
@@ -25,12 +26,14 @@ public class TransactionDTO {
     private Integer parcelas;
     private Boolean isPaga;
 
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataTransacao;
     @NotNull
     private TypeTransaction tipoTransacao;
     @NotNull
     private Account account;
+
 
 
 }

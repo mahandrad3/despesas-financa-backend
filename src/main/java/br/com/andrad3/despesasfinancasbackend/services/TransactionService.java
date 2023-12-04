@@ -85,10 +85,18 @@ public class TransactionService {
     }
     public void removeTransaction(Long id){
         Optional<Transaction> transaction = this.transactionRepository.findById(id);
-        transaction.ifPresent(value -> this.transactionRepository.delete(value));
+        if(transaction.isPresent()){
+            Transaction transacao = transaction.get();
+            if(transacao.getRecorencia() && (transacao.getParcelas() != null)){
+              List<Transaction> transactions =   this.transactionRepository.findAllTransactionsByParentId(transacao.getId());
+
+              this.transactionRepository.deleteAll(transactions);
+            }
+            this.transactionRepository.delete(transacao);
+        }
     }
 
-    public void alterarTransacao(TransactionDTO transactionDTO) {
+    public Transaction alterarTransacao(TransactionDTO transactionDTO) {
         Category category;
         if (transactionDTO.getIdCategory() != null) {
             category = this.categoryRepository.findById(transactionDTO.getIdCategory()).get();
@@ -108,7 +116,7 @@ public class TransactionService {
             }
         }
         transactionDTO.setIdCategory(category.getId());
-        this.transactionRepository.findById(transactionDTO.getIdTransaction())
+        return this.transactionRepository.findById(transactionDTO.getIdTransaction())
                 .map(transactionRecuperada -> {
                     Transaction novaTransaction = new Transaction(transactionDTO);
                     this.transactionRepository.save(novaTransaction);
